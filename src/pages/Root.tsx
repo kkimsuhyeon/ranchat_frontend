@@ -9,7 +9,7 @@ function Root() {
     <Routes>
       <Route path="/demo" element={<Demo />} />
       <Route path="/chatting" element={<Chatting />} />
-      <Route path="*" element={<Navigate to="/demo" />} />
+      <Route path="*" element={<Navigate to="/chatting" />} />
     </Routes>
   );
 }

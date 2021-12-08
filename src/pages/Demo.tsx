@@ -10,7 +10,7 @@ import { DEMO_CALL, DEMO_REQUEST_CALL } from "graphqls/demo";
 
 function Demo() {
   const callData = useSubscription(DEMO_CALL);
-  const [request, requestData] = useMutation(DEMO_REQUEST_CALL);
+  const [request] = useMutation(DEMO_REQUEST_CALL);
 
   console.log(callData.data);
 
