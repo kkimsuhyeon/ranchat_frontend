@@ -75,6 +75,16 @@ const Wrapper = styled.section`
       padding: 1rem;
       height: calc(100% - 3rem);
       overflow-y: auto;
+
+      &::-webkit-scrollbar {
+        background-color: transparent;
+        width: 0.5rem;
+
+        &-thumb {
+          background-color: pink;
+          border-radius: 1rem;
+        }
+      }
     }
 
     &:last-of-type {
