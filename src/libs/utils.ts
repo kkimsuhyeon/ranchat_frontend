@@ -5,7 +5,8 @@ export const decodeToken = (token: string) => {
     const result = JSON.parse(payload.toString());
     return result;
   } catch (e) {
-    throw new Error("token 형식이 잘못되었습니다.");
+    clearStoreage();
+    window.location.href = "/login";
   }
 };
 

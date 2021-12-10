@@ -1,7 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { BrowserRouter } from "react-router-dom";
-import { RecoilRoot } from "recoil";
 
 import reportWebVitals from "./reportWebVitals";
 import App from "./App";
@@ -11,9 +10,7 @@ ReactDOM.render(
   <React.StrictMode>
     <BrowserRouter>
       <ApolloProvider>
-        <RecoilRoot>
-          <App />
-        </RecoilRoot>
+        <App />
       </ApolloProvider>
     </BrowserRouter>
   </React.StrictMode>,

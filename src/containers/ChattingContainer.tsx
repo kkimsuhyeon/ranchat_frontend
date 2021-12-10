@@ -3,6 +3,7 @@ import styled from "@emotion/styled";
 import { useMutation, useQuery } from "@apollo/client";
 
 import useUserInfo from "hooks/useUserInfo";
+import useCustomQuery from "hooks/useCustomQuery";
 
 import { SEND_MESSAGE } from "graphqls/message";
 import {
@@ -20,8 +21,10 @@ function ChattingContainer() {
   const {
     loading,
     data: roomData,
+    error,
     subscribeToMore,
-  } = useQuery<{ roomById: RoomType }, { id: number }>(QUERY_ROOM_BY_ID, {
+  } = useCustomQuery<{ id: number }, { roomById: RoomType }>({
+    query: QUERY_ROOM_BY_ID,
     variables: { id: 1 },
   });
 

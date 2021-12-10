@@ -16,6 +16,8 @@ export const updateUserInfo = selector({
     const token = localStorage.getItem("token");
     if (token === null) return { email: "", id: "" };
     const result = decodeToken(token);
+    if (result?.id === undefined || result?.email === undefined)
+      return { email: "", id: "" };
     return {
       id: result.id,
       email: result.email,
