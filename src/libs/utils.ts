@@ -8,3 +8,7 @@ export const decodeToken = (token: string) => {
     throw new Error("token 형식이 잘못되었습니다.");
   }
 };
+
+export const clearStoreage = () => {
+  localStorage.clear();
+};

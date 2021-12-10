@@ -1,19 +1,11 @@
-import { useCallback } from "react";
-import { useSetRecoilState } from "recoil";
+import { useRecoilValue } from "recoil";
 
-import { decodeToken } from "libs/utils";
-
-import { userInfo } from "store/userInfo";
+import { updateUserInfo } from "store/userInfo";
 
 function useUserInfo() {
-  const setUserInfo = useSetRecoilState(userInfo);
+  const userInfo = useRecoilValue(updateUserInfo);
 
-  const setter = useCallback((token: string) => {
-    const result = decodeToken(token);
-    console.log(result);
-  }, []);
-
-  return setter;
+  return userInfo;
 }
 
 export default useUserInfo;

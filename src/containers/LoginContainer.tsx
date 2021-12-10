@@ -8,12 +8,17 @@ import { ResponseError } from "libs/class";
 import { QUERY_REQUEST_TOKEN } from "graphqls/user";
 
 import InputForm, { InputFormProps } from "components/login/InputForm";
+import useUserInfo from "hooks/useUserInfo";
 
 export interface LoginContainerProps {
   onSuccess: () => void;
 }
 
 function LoginContainer({ onSuccess }: LoginContainerProps) {
+  const userInfo = useUserInfo();
+
+  console.log(userInfo);
+
   const [requestLogin] = useLazyQuery<
     { requestToken: string },
     { email: string; password: string }
@@ -39,7 +44,7 @@ function LoginContainer({ onSuccess }: LoginContainerProps) {
         console.log(e);
       }
     },
-    [requestLogin]
+    [requestLogin, onSuccess]
   );
 
   return (

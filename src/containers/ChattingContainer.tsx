@@ -2,6 +2,8 @@ import React, { useCallback, useMemo, useEffect } from "react";
 import styled from "@emotion/styled";
 import { useMutation, useQuery } from "@apollo/client";
 
+import useUserInfo from "hooks/useUserInfo";
+
 import { SEND_MESSAGE } from "graphqls/message";
 import {
   SUBSCRIPTION_UPDATE_ROOM,
@@ -13,6 +15,8 @@ import SendForm from "components/chatting/SendForm";
 import MessageList, { MessageListProps } from "components/chatting/MessageList";
 
 function ChattingContainer() {
+  const userInfo = useUserInfo();
+
   const {
     loading,
     data: roomData,
