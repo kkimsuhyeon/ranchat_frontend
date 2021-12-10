@@ -16,7 +16,6 @@ function ChattingContainer() {
   const {
     loading,
     data: roomData,
-    error,
     subscribeToMore,
   } = useQuery<{ roomById: RoomType }, { id: number }>(QUERY_ROOM_BY_ID, {
     variables: { id: 1 },

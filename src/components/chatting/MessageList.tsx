@@ -19,8 +19,8 @@ function MessageList({ messages, loading }: MessageListProps) {
     <article ref={articleRef}>
       {loading
         ? "loading..."
-        : messages?.map((message) => (
-            <MessageCard type={message.type} text={message.text} />
+        : messages?.map(({ text, type }, index) => (
+            <MessageCard key={`message-${index}`} type={type} text={text} />
           ))}
     </article>
   );

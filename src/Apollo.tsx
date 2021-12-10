@@ -6,7 +6,6 @@ import {
   HttpLink,
   split,
   ApolloLink,
-  concat,
   from,
 } from "@apollo/client";
 import { WebSocketLink } from "@apollo/client/link/ws";
@@ -30,15 +29,14 @@ function ApolloProvider({ children }: { children: React.ReactNode }) {
     return forward(operation);
   });
 
-  const testMiddleware = new ApolloLink((operation, forward) => {
-    return forward(operation);
-  });
-
   const wsLink = new WebSocketLink(
     new SubscriptionClient(SOCKET_URI, {
       reconnect: true,
       timeout: 30000,
-      connectionParams: { authorization: localStorage.getItem("token") ?? "" },
+      lazy: true,
+      connectionParams: () => {
+        return { authorization: localStorage.getItem("token") ?? "" };
+      },
     })
   );
 
@@ -55,7 +53,7 @@ function ApolloProvider({ children }: { children: React.ReactNode }) {
   );
 
   const client = new ApolloClient({
-    link: from([authMiddleware, testMiddleware.concat(splitLink)]),
+    link: from([authMiddleware, splitLink]),
     cache: new InMemoryCache(),
   });
 

@@ -17,6 +17,7 @@ export const QUERY_ROOM_BY_ID = gql`
       users {
         id
         fullName
+        email
       }
       messages {
         id
@@ -24,6 +25,7 @@ export const QUERY_ROOM_BY_ID = gql`
         user {
           id
           fullName
+          email
         }
       }
     }
