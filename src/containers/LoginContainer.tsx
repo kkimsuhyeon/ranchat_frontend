@@ -3,29 +3,43 @@ import { NavLink } from "react-router-dom";
 import styled from "@emotion/styled";
 import { useLazyQuery } from "@apollo/client";
 
+import { ResponseError } from "libs/class";
+
 import { QUERY_REQUEST_TOKEN } from "graphqls/user";
 
 import InputForm, { InputFormProps } from "components/login/InputForm";
 
-export interface PropTypes {}
+export interface LoginContainerProps {
+  onSuccess: () => void;
+}
 
-function LoginContainer() {
-  const [requestLogin, loginResponse] = useLazyQuery<
-    string,
+function LoginContainer({ onSuccess }: LoginContainerProps) {
+  const [requestLogin] = useLazyQuery<
+    { requestToken: string },
     { email: string; password: string }
-  >(QUERY_REQUEST_TOKEN, { errorPolicy: "all" });
+  >(QUERY_REQUEST_TOKEN);
 
   const login = useCallback<InputFormProps["onSubmit"]>(
     async ({ id, password }) => {
       try {
-        await requestLogin({ variables: { email: id, password } });
-        console.log(loginResponse.data);
-        console.log(loginResponse.error);
+        const { data, error } = await requestLogin({
+          variables: { email: id, password },
+        });
+
+        if (data) {
+          const { requestToken } = data;
+          localStorage.setItem("token", requestToken);
+          onSuccess();
+        }
+
+        if (error && new ResponseError(error).code === "401") {
+          console.log("아이디 / 비밀번호를 확인해주세요.");
+        }
       } catch (e) {
         console.log(e);
       }
     },
-    [requestLogin, loginResponse]
+    [requestLogin]
   );
 
   return (
@@ -40,7 +54,11 @@ export default LoginContainer;
 
 const Section = styled.section`
   border: 1px solid pink;
-  padding: 5rem;
+  padding: 4rem;
+
+  & > article {
+    margin-bottom: 1rem;
+  }
 
   & > a {
     margin-left: auto;

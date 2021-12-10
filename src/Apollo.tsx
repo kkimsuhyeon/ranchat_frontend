@@ -5,16 +5,42 @@ import {
   ApolloProvider as Provider,
   HttpLink,
   split,
+  ApolloLink,
+  concat,
+  from,
 } from "@apollo/client";
 import { WebSocketLink } from "@apollo/client/link/ws";
 import { getMainDefinition } from "@apollo/client/utilities";
+import { SubscriptionClient } from "subscriptions-transport-ws";
+
+const GRAPHQL_URI = "http://localhost:4000/graphql";
+const SOCKET_URI = "ws://localhost:4000/graphql";
 
 function ApolloProvider({ children }: { children: React.ReactNode }) {
-  const httpLink = new HttpLink({ uri: "http://localhost:4000/graphql" });
-  const wsLink = new WebSocketLink({
-    uri: "ws://localhost:4000/graphql",
-    options: { reconnect: true },
+  const httpLink = new HttpLink({ uri: GRAPHQL_URI });
+
+  const authMiddleware = new ApolloLink((operation, forward) => {
+    operation.setContext(({ headers = {} }) => ({
+      headers: {
+        ...headers,
+        authorization: localStorage.getItem("token") ?? "",
+      },
+    }));
+
+    return forward(operation);
   });
+
+  const testMiddleware = new ApolloLink((operation, forward) => {
+    return forward(operation);
+  });
+
+  const wsLink = new WebSocketLink(
+    new SubscriptionClient(SOCKET_URI, {
+      reconnect: true,
+      timeout: 30000,
+      connectionParams: { authorization: localStorage.getItem("token") ?? "" },
+    })
+  );
 
   const splitLink = split(
     ({ query }) => {
@@ -29,7 +55,7 @@ function ApolloProvider({ children }: { children: React.ReactNode }) {
   );
 
   const client = new ApolloClient({
-    link: splitLink,
+    link: from([authMiddleware, testMiddleware.concat(splitLink)]),
     cache: new InMemoryCache(),
   });
 

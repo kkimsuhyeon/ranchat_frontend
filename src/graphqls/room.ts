@@ -16,14 +16,14 @@ export const QUERY_ROOM_BY_ID = gql`
       id
       users {
         id
-        name
+        fullName
       }
       messages {
         id
         text
         user {
           id
-          name
+          fullName
         }
       }
     }
@@ -36,14 +36,14 @@ export const SUBSCRIPTION_UPDATE_ROOM = gql`
       id
       users {
         id
-        name
+        fullName
       }
       messages {
         id
         text
         user {
           id
-          name
+          fullName
         }
       }
     }

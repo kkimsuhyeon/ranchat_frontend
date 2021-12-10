@@ -35,8 +35,6 @@ export const MUTATION_CREATE_USER = gql`
 
 export const QUERY_REQUEST_TOKEN = gql`
   query requestToken($email: String!, $password: String!) {
-    requestToken(email: $email, password: $password) {
-      message
-    }
+    requestToken(email: $email, password: $password)
   }
 `;

@@ -21,8 +21,6 @@ function SendForm({ onSubmit, loading }: SendFormProps) {
     [onSubmit, text, changeText]
   );
 
-  console.log(loading);
-
   return (
     <article>
       <Form onSubmit={handleSubmit}>

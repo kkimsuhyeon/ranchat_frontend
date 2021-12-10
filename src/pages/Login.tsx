@@ -1,12 +1,19 @@
-import React from "react";
+import React, { useCallback } from "react";
 import styled from "@emotion/styled";
+import { useNavigate } from "react-router-dom";
 
 import LoginContainer from "containers/LoginContainer";
 
 function Login() {
+  const navigate = useNavigate();
+
+  const goToMain = useCallback(() => {
+    navigate("/");
+  }, [navigate]);
+
   return (
     <Section>
-      <LoginContainer />
+      <LoginContainer onSuccess={goToMain} />
     </Section>
   );
 }

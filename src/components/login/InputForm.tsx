@@ -1,5 +1,6 @@
 import React, { useCallback } from "react";
-import { Button, Input } from "@mui/material";
+import styled from "@emotion/styled";
+import { Input } from "@mui/material";
 
 import useInput from "hooks/useInput";
 
@@ -23,21 +24,25 @@ function InputForm({ onSubmit }: InputFormProps) {
 
   return (
     <article>
-      <form onSubmit={handleSubmit}>
+      <Form onSubmit={handleSubmit}>
         <Div margin="0 0 0.5rem 0">
           <Input value={id} onChange={changeId} />
         </Div>
         <Div margin="0 0 1rem 0">
           <Input type="password" value={password} onChange={changePassword} />
         </Div>
-        <Div>
-          <Button type="submit" variant="contained">
-            로그인
-          </Button>
-        </Div>
-      </form>
+        <button type="submit">로그인</button>
+      </Form>
     </article>
   );
 }
 
 export default InputForm;
+
+const Form = styled.form`
+  & > button {
+    padding: 0.5rem;
+    width: 100%;
+    background: pink;
+  }
+`;
