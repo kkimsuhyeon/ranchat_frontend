@@ -20,7 +20,7 @@ function Demo() {
     }, 500);
   }, [request]);
 
-  return <div>demo</div>;
+  return <div>test</div>;
 }
 
 export default Demo;

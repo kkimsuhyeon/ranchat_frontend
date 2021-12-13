@@ -1,9 +1,10 @@
 import React, { useCallback, useMemo, useEffect } from "react";
 import styled from "@emotion/styled";
-import { useMutation, useQuery } from "@apollo/client";
+import { useMutation } from "@apollo/client";
 
 import useUserInfo from "hooks/useUserInfo";
 import useCustomQuery from "hooks/useCustomQuery";
+import useSpinner from "hooks/useSpinner";
 
 import { SEND_MESSAGE } from "graphqls/message";
 import {
@@ -15,17 +16,20 @@ import {
 import SendForm from "components/chatting/SendForm";
 import MessageList, { MessageListProps } from "components/chatting/MessageList";
 
-function ChattingContainer() {
+export interface ChattingContainerProps {
+  id: string;
+}
+
+function ChattingContainer({ id }: ChattingContainerProps) {
   const userInfo = useUserInfo();
 
   const {
     loading,
     data: roomData,
-    error,
     subscribeToMore,
   } = useCustomQuery<{ id: number }, { roomById: RoomType }>({
     query: QUERY_ROOM_BY_ID,
-    variables: { id: 1 },
+    variables: { id: Number(id) },
   });
 
   const [requestSendMessage] = useMutation<void, { message: string }>(
@@ -56,11 +60,11 @@ function ChattingContainer() {
   }, [roomData, userInfo]);
 
   useEffect(() => {
-    subscribeToMore<{ update: RoomType }>({
+    subscribeToMore<{ chattingUpdate: RoomType }>({
       document: SUBSCRIPTION_UPDATE_ROOM,
       updateQuery: (prev, { subscriptionData: { data } }) => {
         if (!data) return prev;
-        return { roomById: { ...prev.roomById, ...data.update } };
+        return { roomById: { ...prev.roomById, ...data.chattingUpdate } };
       },
     });
   }, [subscribeToMore]);
@@ -82,6 +86,7 @@ const Wrapper = styled.section`
 
   & > article {
     &:first-of-type {
+      position: relative;
       padding: 1rem;
       height: calc(100% - 3rem);
       overflow-y: auto;

@@ -5,7 +5,7 @@ import { clearStoreage } from "libs/utils";
 
 export interface useCustomQueryProps<P> {
   query: DocumentNode;
-  variables: P;
+  variables?: P;
 }
 
 function useCustomQuery<P, R>({ query, variables }: useCustomQueryProps<P>) {

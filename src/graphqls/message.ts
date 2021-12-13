@@ -9,6 +9,7 @@ export interface MessageType extends BaseType {
   text: string;
   user: UserType;
   room: RoomType;
+  createdAt: Date;
 }
 
 export const SEND_MESSAGE = gql`

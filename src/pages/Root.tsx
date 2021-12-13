@@ -22,9 +22,8 @@ function Root() {
       >
         <Route path="*" element={<BaseLayout />}>
           <Route path="demo" element={<Demo />} />
-          <Route path="room/*" element={<RoomList />}>
-            <Route path=":id" element={<Chatting />} />
-          </Route>
+          <Route path="room" element={<RoomList />} />
+          <Route path="room/:id" element={<Chatting />} />
           <Route path="*" element={<Navigate to="/room" />} />
         </Route>
       </Route>

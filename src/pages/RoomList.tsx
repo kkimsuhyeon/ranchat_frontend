@@ -1,9 +1,21 @@
-import React from "react";
+import React, { useCallback } from "react";
+import { useNavigate } from "react-router-dom";
+
+import RoomListContainer from "containers/RoomListContainer";
 
 export interface RoomListProps {}
 
 function RoomList() {
-  return <div>RoomList</div>;
+  const navigate = useNavigate();
+
+  const goToChatting = useCallback(
+    (id: string) => {
+      navigate(`/room/${id}`);
+    },
+    [navigate]
+  );
+
+  return <RoomListContainer onClick={goToChatting} />;
 }
 
 export default RoomList;

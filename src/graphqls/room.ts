@@ -10,6 +10,21 @@ export interface RoomType extends BaseType {
   messages: Array<MessageType>;
 }
 
+export const QUERY_ROOM_LIST = gql`
+  query rooms {
+    rooms {
+      id
+      users {
+        email
+      }
+      messages {
+        text
+        createdAt
+      }
+    }
+  }
+`;
+
 export const QUERY_ROOM_BY_ID = gql`
   query roomById($id: Int!) {
     roomById(id: $id) {
@@ -33,8 +48,8 @@ export const QUERY_ROOM_BY_ID = gql`
 `;
 
 export const SUBSCRIPTION_UPDATE_ROOM = gql`
-  subscription updateRoom {
-    update {
+  subscription updateChatting {
+    chattingUpdate {
       id
       users {
         id

@@ -1,12 +1,15 @@
 import React from "react";
 import styled from "@emotion/styled";
+import { useParams } from "react-router-dom";
 
 import ChattingContainer from "containers/ChattingContainer";
 
 function Chatting() {
+  const { id = "" } = useParams();
+
   return (
     <Wrapper>
-      <ChattingContainer />
+      <ChattingContainer id={id} />
     </Wrapper>
   );
 }
