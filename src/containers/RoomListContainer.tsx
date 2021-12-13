@@ -1,12 +1,12 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "@emotion/styled";
 
-import useUserInfo from "hooks/useUserInfo";
 import useCustomQuery from "hooks/useCustomQuery";
+import useSpinner from "hooks/useSpinner";
 
 import { QUERY_ROOM_LIST, RoomType } from "graphqls/room";
 
-import RoomCard, { RoomCardProps } from "components/room/RoomCard";
+import RoomCard from "components/room/RoomCard";
 import CreateButton from "components/room/CreateButton";
 
 export interface RoomListContainerProps {
@@ -14,11 +14,15 @@ export interface RoomListContainerProps {
 }
 
 function RoomListContainer({ onClick }: RoomListContainerProps) {
-  const userInfo = useUserInfo();
+  const [setSpinner] = useSpinner();
 
   const { data, loading } = useCustomQuery<void, { rooms: Array<RoomType> }>({
     query: QUERY_ROOM_LIST,
   });
+
+  useEffect(() => {
+    setSpinner(loading);
+  }, [loading, setSpinner]);
 
   return (
     <>
