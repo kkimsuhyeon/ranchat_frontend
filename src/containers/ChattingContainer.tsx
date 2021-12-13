@@ -43,12 +43,17 @@ function ChattingContainer() {
     const result = roomData?.roomById.messages.reduce<
       MessageListProps["messages"]
     >((acc, cur) => {
-      if (acc === undefined) return [{ type: "send", text: cur.text }];
-      return [...acc, { type: "send", text: cur.text }];
+      let type: "send" | "receive";
+
+      if (cur.user.email === userInfo.email) type = "send";
+      else type = "receive";
+
+      if (acc === undefined) return [{ type: type, text: cur.text }];
+      return [...acc, { type: type, text: cur.text }];
     }, []);
 
     return result;
-  }, [roomData]);
+  }, [roomData, userInfo]);
 
   useEffect(() => {
     subscribeToMore<{ update: RoomType }>({

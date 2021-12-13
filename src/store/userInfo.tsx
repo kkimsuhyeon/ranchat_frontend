@@ -10,7 +10,7 @@ export const userInfo = atom({
   },
 });
 
-export const updateUserInfo = selector({
+export const updateUserInfo = selector<{ id: string; email: string }>({
   key: "updateUserInfo",
   get: () => {
     const token = localStorage.getItem("token");

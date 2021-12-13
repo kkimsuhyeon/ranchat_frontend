@@ -6,7 +6,9 @@ import { RoomType } from "./room";
 
 export interface UserType extends BaseType {
   __typename: "User";
-  name: string;
+  id: string;
+  fullName?: string;
+  email: string;
   rooms?: Array<RoomType>;
   message?: Array<MessageType>;
 }
