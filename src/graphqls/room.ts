@@ -6,6 +6,8 @@ import { UserType } from "./user";
 
 export interface RoomType extends BaseType {
   __typename: "Room";
+  createdAt: Date;
+  updatedAt: Date;
   users: Array<UserType>;
   messages: Array<MessageType>;
 }
@@ -44,6 +46,12 @@ export const QUERY_ROOM_BY_ID = gql`
         }
       }
     }
+  }
+`;
+
+export const MUTATION_CREATE_ROOM_BY_ID = gql`
+  mutation createRoomByUserId($userId: String!) {
+    createRoomByUserId(userId: $userId)
   }
 `;
 

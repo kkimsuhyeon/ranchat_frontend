@@ -13,6 +13,7 @@ export interface CreateDialogProps {
   data?: Array<UserInfo>;
   onClose?: OverlayProps["onClose"];
   onSubmit: (email: string) => void;
+  onClick: (data: any) => void;
 }
 
 const TABLE_STRUCTURE: TableProps<UserInfo>["structure"] = [
@@ -20,7 +21,13 @@ const TABLE_STRUCTURE: TableProps<UserInfo>["structure"] = [
   { id: "name", title: "이름", flex: "1" },
 ];
 
-function CreateDialog({ data, onClose, onSubmit, isOpen }: CreateDialogProps) {
+function CreateDialog({
+  data,
+  onClose,
+  onSubmit,
+  isOpen,
+  onClick,
+}: CreateDialogProps) {
   const [email, setEmail] = useInput({});
 
   const handleSubmit = useCallback(
@@ -38,7 +45,7 @@ function CreateDialog({ data, onClose, onSubmit, isOpen }: CreateDialogProps) {
           <Input value={email} onChange={setEmail} placeholder="email" />
           <Button type="submit">검색</Button>
         </form>
-        <Table structure={TABLE_STRUCTURE} data={data} />
+        <Table structure={TABLE_STRUCTURE} data={data} onClick={onClick} />
       </Wrapper>
     </Overlay>
   );

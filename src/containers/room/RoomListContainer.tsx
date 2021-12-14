@@ -43,8 +43,12 @@ function RoomListContainer({ onClick }: RoomListContainerProps) {
           <RoomCard
             key={room.id}
             id={Number(room.id)}
-            message={room.messages[0].text}
-            updatedAt={room.messages[0].createdAt}
+            message={room.messages.length !== 0 ? room.messages[0].text : ""}
+            updatedAt={
+              room.messages.length !== 0
+                ? room.messages[0].createdAt
+                : room.updatedAt
+            }
             onClick={() => onClick(room.id)}
           />
         ))}
@@ -65,9 +69,10 @@ const Wrapper = styled.section`
 
   &::-webkit-scrollbar {
     width: 0.3rem;
+    background-color: transparent;
 
     &-thumb {
-      background-color: white;
+      background-color: pink;
       border-radius: 1rem;
     }
   }
