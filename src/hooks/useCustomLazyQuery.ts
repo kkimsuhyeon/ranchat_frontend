@@ -1,4 +1,4 @@
-import { useQuery } from "@apollo/client";
+import { useLazyQuery } from "@apollo/client";
 import { DocumentNode } from "graphql";
 
 import { ResponseError } from "libs/class";
@@ -9,8 +9,14 @@ export interface useCustomQueryProps<P> {
   variables?: P;
 }
 
-function useCustomQuery<P, R>({ query, variables }: useCustomQueryProps<P>) {
-  const { loading, data, error, subscribeToMore } = useQuery<R, P>(query, {
+function useCustomLazyQuery<P, R>({
+  query,
+  variables,
+}: useCustomQueryProps<P>) {
+  const [request, { loading, data, error, subscribeToMore }] = useLazyQuery<
+    R,
+    P
+  >(query, {
     variables: variables,
   });
 
@@ -19,7 +25,7 @@ function useCustomQuery<P, R>({ query, variables }: useCustomQueryProps<P>) {
     window.location.href = "/login";
   }
 
-  return { loading, data, error, subscribeToMore };
+  return { request, data, loading, error, subscribeToMore };
 }
 
-export default useCustomQuery;
+export default useCustomLazyQuery;

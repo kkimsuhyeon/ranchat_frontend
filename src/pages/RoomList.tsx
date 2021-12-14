@@ -1,7 +1,7 @@
 import React, { useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 
-import RoomListContainer from "containers/RoomListContainer";
+import RoomListContainer from "containers/room/RoomListContainer";
 
 export interface RoomListProps {}
 

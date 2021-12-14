@@ -23,4 +23,5 @@ const Wrapper = styled.span`
   border-radius: 50%;
   text-align: center;
   line-height: 3rem;
+  cursor: pointer;
 `;

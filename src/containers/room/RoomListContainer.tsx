@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import styled from "@emotion/styled";
 
 import useCustomQuery from "hooks/useCustomQuery";
@@ -8,6 +8,8 @@ import { QUERY_ROOM_LIST, RoomType } from "graphqls/room";
 
 import RoomCard from "components/room/RoomCard";
 import CreateButton from "components/room/CreateButton";
+
+import CreateDialogContainer from "containers/room/CreateDialogContainer";
 
 export interface RoomListContainerProps {
   onClick: (id: string) => void;
@@ -19,6 +21,16 @@ function RoomListContainer({ onClick }: RoomListContainerProps) {
   const { data, loading } = useCustomQuery<void, { rooms: Array<RoomType> }>({
     query: QUERY_ROOM_LIST,
   });
+
+  const [isOpen, setOpen] = useState<boolean>(false);
+
+  const openDialog = useCallback(() => {
+    setOpen(true);
+  }, []);
+
+  const closeDialog = useCallback(() => {
+    setOpen(false);
+  }, []);
 
   useEffect(() => {
     setSpinner(loading);
@@ -37,8 +49,9 @@ function RoomListContainer({ onClick }: RoomListContainerProps) {
           />
         ))}
 
-        <CreateButton onClick={() => {}} />
+        <CreateButton onClick={openDialog} />
       </Wrapper>
+      <CreateDialogContainer isOpen={isOpen} onClose={closeDialog} />
     </>
   );
 }

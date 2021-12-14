@@ -25,17 +25,24 @@ function Overlay({ children, isOpen, onClose }: OverlayProps) {
     mouseDownRef.current = e.target as HTMLElement;
   }, []);
 
-  const handleMouseUp = useCallback((e: React.MouseEvent<HTMLElement>) => {},
-  []);
-
-  const handleKeyPress = useCallback(
-    (e: React.KeyboardEvent) => {
-      if (e.key === "Escape") handleClose(e);
+  const handleMouseUp = useCallback(
+    (e: React.MouseEvent<HTMLElement>) => {
+      if (
+        e.target === overlayRef.current &&
+        mouseDownRef.current === overlayRef.current
+      )
+        handleClose(e);
     },
     [handleClose]
   );
 
-  if (!isOpen) return null;
+  const handleKeyPress = useCallback(
+    (e: React.KeyboardEvent) => {
+      console.log(e.key);
+      if (e.key === "Escape") handleClose(e);
+    },
+    [handleClose]
+  );
 
   return (
     <Wrapper
