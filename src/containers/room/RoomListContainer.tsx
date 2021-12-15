@@ -4,12 +4,17 @@ import styled from "@emotion/styled";
 import useCustomQuery from "hooks/useCustomQuery";
 import useSpinner from "hooks/useSpinner";
 
-import { QUERY_ROOM_LIST, RoomType } from "graphqls/room";
+import {
+  QUERY_ROOM_LIST,
+  RoomType,
+  SUBSCRIPTION_UPDATE_ROOM_LIST,
+} from "graphqls/room";
 
 import RoomCard from "components/room/RoomCard";
 import CreateButton from "components/room/CreateButton";
 
 import CreateDialogContainer from "containers/room/CreateDialogContainer";
+import { UserType } from "graphqls/user";
 
 export interface RoomListContainerProps {
   onClick: (id: string) => void;
@@ -18,7 +23,12 @@ export interface RoomListContainerProps {
 function RoomListContainer({ onClick }: RoomListContainerProps) {
   const [setSpinner] = useSpinner();
 
-  const { data, loading } = useCustomQuery<void, { rooms: Array<RoomType> }>({
+  const { data, loading, subscribeToMore } = useCustomQuery<
+    void,
+    { rooms: Array<RoomType> },
+    "query"
+  >({
+    type: "query",
     query: QUERY_ROOM_LIST,
   });
 
@@ -36,6 +46,21 @@ function RoomListContainer({ onClick }: RoomListContainerProps) {
     setSpinner(loading);
   }, [loading, setSpinner]);
 
+  useEffect(() => {
+    subscribeToMore<{ roomListUpdate: UserType }>({
+      document: SUBSCRIPTION_UPDATE_ROOM_LIST,
+      updateQuery: (prev, { subscriptionData: { data } }) => {
+        if (!data) return prev;
+        return {
+          rooms: [
+            ...prev.rooms,
+            ...(data.roomListUpdate.rooms as Array<RoomType>),
+          ],
+        };
+      },
+    });
+  }, [subscribeToMore]);
+
   return (
     <>
       <Wrapper>
@@ -43,12 +68,12 @@ function RoomListContainer({ onClick }: RoomListContainerProps) {
           <RoomCard
             key={room.id}
             id={Number(room.id)}
-            message={room.messages.length !== 0 ? room.messages[0].text : ""}
-            updatedAt={
+            message={
               room.messages.length !== 0
-                ? room.messages[0].createdAt
-                : room.updatedAt
+                ? room.messages[room.messages.length - 1].text
+                : ""
             }
+            updatedAt={room.updatedAt}
             onClick={() => onClick(room.id)}
           />
         ))}

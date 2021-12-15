@@ -1,14 +1,13 @@
 import React, { useCallback, useMemo, useEffect } from "react";
 import styled from "@emotion/styled";
-import { useMutation } from "@apollo/client";
 
 import useUserInfo from "hooks/useUserInfo";
 import useCustomQuery from "hooks/useCustomQuery";
 import useSpinner from "hooks/useSpinner";
 
-import { SEND_MESSAGE } from "graphqls/message";
+import { MUTATION_SEND_MESSAGE } from "graphqls/message";
 import {
-  SUBSCRIPTION_UPDATE_ROOM,
+  SUBSCRIPTION_UPDATE_CHATTING,
   QUERY_ROOM_BY_ID,
   RoomType,
 } from "graphqls/room";
@@ -27,20 +26,28 @@ function ChattingContainer({ id }: ChattingContainerProps) {
     loading,
     data: roomData,
     subscribeToMore,
-  } = useCustomQuery<{ id: number }, { roomById: RoomType }>({
+  } = useCustomQuery<{ id: number }, { roomById: RoomType }, "query">({
+    type: "query",
     query: QUERY_ROOM_BY_ID,
     variables: { id: Number(id) },
   });
 
-  const [requestSendMessage] = useMutation<void, { message: string }>(
-    SEND_MESSAGE
-  );
+  const { request: requestSendMessage } = useCustomQuery<
+    { message: string; roomId: number },
+    void,
+    "mutation"
+  >({
+    type: "mutation",
+    query: MUTATION_SEND_MESSAGE,
+  });
 
   const sendMessage = useCallback(
     (message: string) => {
-      requestSendMessage({ variables: { message: message } });
+      requestSendMessage({
+        variables: { message: message, roomId: Number(id) },
+      });
     },
-    [requestSendMessage]
+    [requestSendMessage, id]
   );
 
   const messages = useMemo(() => {
@@ -61,10 +68,10 @@ function ChattingContainer({ id }: ChattingContainerProps) {
 
   useEffect(() => {
     subscribeToMore<{ chattingUpdate: RoomType }>({
-      document: SUBSCRIPTION_UPDATE_ROOM,
+      document: SUBSCRIPTION_UPDATE_CHATTING,
       updateQuery: (prev, { subscriptionData: { data } }) => {
         if (!data) return prev;
-        return { roomById: { ...prev.roomById, ...data.chattingUpdate } };
+        return { roomById: { ...data.chattingUpdate } };
       },
     });
   }, [subscribeToMore]);

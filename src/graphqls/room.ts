@@ -55,13 +55,28 @@ export const MUTATION_CREATE_ROOM_BY_ID = gql`
   }
 `;
 
-export const SUBSCRIPTION_UPDATE_ROOM = gql`
-  subscription updateChatting {
+export const SUBSCRIPTION_UPDATE_ROOM_LIST = gql`
+  subscription roomListUpdate {
+    roomListUpdate {
+      rooms {
+        id
+        messages {
+          text
+          createdAt
+        }
+      }
+    }
+  }
+`;
+
+export const SUBSCRIPTION_UPDATE_CHATTING = gql`
+  subscription chattingUpdate {
     chattingUpdate {
       id
       users {
         id
         fullName
+        email
       }
       messages {
         id
@@ -69,6 +84,7 @@ export const SUBSCRIPTION_UPDATE_ROOM = gql`
         user {
           id
           fullName
+          email
         }
       }
     }

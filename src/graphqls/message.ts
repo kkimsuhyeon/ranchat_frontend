@@ -12,8 +12,8 @@ export interface MessageType extends BaseType {
   createdAt: Date;
 }
 
-export const SEND_MESSAGE = gql`
-  mutation sendMessage($message: String!) {
-    sendMessage(message: $message)
+export const MUTATION_SEND_MESSAGE = gql`
+  mutation sendMessage($message: String!, $roomId: Int!) {
+    sendMessage(message: $message, roomId: $roomId)
   }
 `;

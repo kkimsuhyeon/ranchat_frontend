@@ -1,9 +1,10 @@
 import React, { useCallback } from "react";
 import { NavLink } from "react-router-dom";
 import styled from "@emotion/styled";
-import { useLazyQuery } from "@apollo/client";
 
 import { ResponseError } from "libs/class";
+
+import useCustomQuery from "hooks/useCustomQuery";
 
 import { QUERY_REQUEST_TOKEN } from "graphqls/user";
 
@@ -14,10 +15,13 @@ export interface LoginContainerProps {
 }
 
 function LoginContainer({ onSuccess }: LoginContainerProps) {
-  const [requestLogin] = useLazyQuery<
-    { requestToken: string },
-    { email: string; password: string }
-  >(QUERY_REQUEST_TOKEN);
+  const { request: requestLogin } = useCustomQuery<
+    { email: string; password: string },
+    { requestToken: string }
+  >({
+    type: "lazy",
+    query: QUERY_REQUEST_TOKEN,
+  });
 
   const login = useCallback<InputFormProps["onSubmit"]>(
     async ({ id, password }) => {
