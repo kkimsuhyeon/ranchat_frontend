@@ -2,7 +2,7 @@ import React from "react";
 import styled from "@emotion/styled";
 import { Outlet } from "react-router-dom";
 
-function BaseLayout() {
+function CenterLayout() {
   return (
     <Wrapper>
       <Outlet />
@@ -10,11 +10,12 @@ function BaseLayout() {
   );
 }
 
-export default BaseLayout;
+export default CenterLayout;
 
 const Wrapper = styled.section`
-  width: 25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   height: 100vh;
-  margin: 0 auto;
-  background-color: whitesmoke;
+  width: 100vw;
 `;
